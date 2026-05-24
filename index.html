@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Flow as Flow: Modeling Robot Velocity Fields as Probability Velocity Fields for Flow-Based Object Manipulation">
+  <meta name="keywords"
+    content="Flow Matching, Robot Learning, Cross-Embodiment, Flow-Based Manipulation, Robot Flow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flow as Flow: Modeling Robot Velocity Fields as Probability Velocity Fields for Flow-Based Object Manipulation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/carousel.css">
+  <link rel="stylesheet" href="./static/css/modal.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/modal.js"></script>
+  <script src="./static/js/carousel.js" defer></script>
+
+  <!-- MathJax for equations -->
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    .section-gray {
+      background-color: #f5f5f5;
+    }
+    .findings-box {
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      padding: 1.2em 1.5em;
+      margin-bottom: 1em;
+      background-color: #DDE8FA;
+    }
+    .results-table {
+      font-size: 0.78rem;
+      width: 100%;
+      border-collapse: collapse;
+      border-top: 2px solid #333;
+      border-bottom: 2px solid #333;
+    }
+    .results-table th, .results-table td {
+      padding: 0.22em 0.45em;
+      text-align: center;
+      border: none;
+      white-space: nowrap;
+    }
+    .results-table thead tr:first-child th:first-child { text-align: left; }
+    .results-table tbody td:first-child { text-align: left; }
+    .results-table thead tr:last-child th { border-bottom: 1px solid #999; }
+    .results-table thead tr:nth-last-child(2) th { border-top: 1px solid #999; }
+    .results-table .section-row td { background: #efefef; font-weight: bold; text-align: left; }
+    .results-table .ours-row td { background: #BBDAC2; }
+    .results-table .ours-light-row td { background: #E6EFE7; }
+    .results-table th { background: #f8f8f8; }
+    table.results-table thead th { border-bottom: none; }
+    table.results-table thead tr:last-child th { border-bottom: 1px solid #999; }
+    .video-placeholder {
+      background: #e8e8e8;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+      font-size: 1.1rem;
+      color: #888;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .video-placeholder .icon { font-size: 2.5rem; color: #bbb; }
+  </style>
+</head>
+
+<body>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-widescreen">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            Flow as Flow:<br>
+            Modeling Robot Velocity Fields as Probability Velocity Fields<br>
+            for Flow-Based Object Manipulation
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <p><b>Anonymous Author(s)</b></p>
+            </span>
+          </div>
+          <p><br><b>Under Review</b><br></p>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Paper -->
+              <span class="link-block">
+                <span class="button is-normal is-rounded is-light"
+                  style="pointer-events: none; opacity: 0.5; cursor: default;">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper (coming soon)</span>
+                </span>
+              </span>
+              <!-- arXiv -->
+              <span class="link-block">
+                <span class="button is-normal is-rounded is-light"
+                  style="pointer-events: none; opacity: 0.5; cursor: default;">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv (coming soon)</span>
+                </span>
+              </span>
+              <!-- Code -->
+              <span class="link-block">
+                <span class="button is-normal is-rounded is-light"
+                  style="pointer-events: none; opacity: 0.5; cursor: default;">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code (coming soon)</span>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===================== /HERO ===================== -->
+
+<!-- ===================== TEASER (summary video + eyecatch) ===================== -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+
+      <!-- Summary video (placeholder) -->
+      <div class="video-placeholder" style="border-radius: 15px;">
+        <span class="icon"><i class="fas fa-film"></i></span>
+        <span>Summary video (coming soon)</span>
+        <small style="color:#aaa;">Place <code>static/videos/summary.mp4</code> here</small>
+      </div>
+      <!-- When video is ready, replace the div above with:
+      <video id="summaryVideo" poster="" controls muted loop playsinline height="100%" style="border-radius: 15px;">
+        <source src="./static/videos/summary.mp4" type="video/mp4">
+      </video>
+      -->
+
+      <br><br>
+
+      <!-- Eye-catch figure -->
+      <figure class="image">
+        <img src="./static/images/eyecatch.png" alt="Overview of Flow as Flow framework." />
+      </figure>
+      <p class="content has-text-justified" style="margin-top: 1rem;">
+        <b>Fig. 1:</b>
+        Overview of <b>Flow as Flow</b>. We leverage diverse cross-embodiment videos from multiple robot
+        embodiments and humans for training. At deployment, the model predicts a robot flow (robot velocity field)
+        representing a task-relevant motion conditioned on an initial image and a goal image. The robot then
+        executes object manipulation conditioned on the generated flow to achieve the object poses specified by
+        the goal image.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- ===================== /TEASER ===================== -->
+
+<!-- ===================== ABSTRACT ===================== -->
+<section class="section section-gray">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Cross-embodiment data have become central to training robotic foundation models.
+            To leverage such heterogeneous data, we focus on flow-based object manipulation, where
+            <em>robot flows</em> (robot velocity fields) serve as embodiment-agnostic motion representations.
+            Prior work often formulates robot flows by differencing predicted keypoints across frames, which
+            requires a strong visibility assumption and thus yields rough approximations of their underlying
+            velocity fields.
+            To address this limitation, we propose <b>Flow as Flow</b>, a framework that models robot flows as
+            probability flows based on a flow matching formulation.
+            By naturally modeling such velocity fields within this formulation, our method achieves efficient
+            and high-quality robot flow generation.
+            Across standard benchmarks, our method outperforms representative baseline methods on standard
+            metrics, while achieving approximately 33&times; faster generation.
+            Furthermore, through real-world experiments evaluating 9 methods with 260 trials per method
+            across 13 manipulation tasks, we show that our method achieves a higher average success rate
+            than the baseline methods.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===================== /ABSTRACT ===================== -->
+
+<!-- ===================== KEY RESULTS (highlight boxes) ===================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Highlights</h2>
+        <div class="findings-box">
+          <p>
+            🚀 <b>~33&times; faster generation</b> than the best baseline method (44 ms vs. 1,430 ms per sample).
+          </p>
+        </div>
+        <div class="findings-box">
+          <p>
+            📊 Achieves the <b>best ADE scores</b> across four standard benchmarks (Fractal, Bridge V2, DROID-100, Fanuc Manipulation),
+            including zero-shot settings.
+          </p>
+        </div>
+        <div class="findings-box">
+          <p>
+            🤖 Achieves the <b>highest average success rate</b> across 13 real-world mobile manipulation tasks, outperforming
+            the strongest baseline (Track2Act) by 10 points.
+          </p>
+        </div>
+        <div class="findings-box">
+          <p>
+            🔌 <b>Architecture-agnostic</b>: Flow as Flow can be directly integrated into other flow-based methods without any structural changes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===================== /KEY RESULTS ===================== -->
+
+<!-- ===================== REAL-WORLD VIDEO CAROUSEL ===================== -->
+<section class="section section-gray">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered" style="margin-bottom: 1rem;">Real-World Experiments</h2>
+    <p class="has-text-centered" style="margin-bottom: 1.5rem; color: #666;">
+      Our method is evaluated on 13 mobile manipulation tasks using the Human Support Robot (HSR).
+      Click a video to enlarge.
+    </p>
+
+    <!-- Modal for enlarged video -->
+    <div class="modal" id="modal-video-carousel">
+      <div class="modal-background"></div>
+      <div class="modal-content modal-content-flex-width">
+        <p class="image is-16by9 modal-container"></p>
+      </div>
+    </div>
+
+    <div class="video-carousel-wrapper">
+      <div class="carousel-dots has-text-centered" id="carousel-dots"></div>
+      <button class="carousel-btn left" onclick="prevSlide()">&#9664;</button>
+      <div class="video-carousel-track">
+
+        <!-- Task 1: Push bin into shelf -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video1">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video1" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_push_bin.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Push bin into shelf</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 2: Push chair -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video2">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video2" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_push_chair.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Push chair</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 3: Close drawer -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video3">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video3" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_close_drawer.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Close drawer</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 4: Open drawer -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video4">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video4" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_open_drawer.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Open drawer</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 5: Close box -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video5">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video5" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_close_box.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Close box</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 6: Bussing table -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video6">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video6" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_bussing_table.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Bussing table</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 7: Close laptop -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video7">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video7" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_close_laptop.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Close laptop</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 8: Bin picking -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video8">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video8" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_bin_picking.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Bin picking</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 9: Water plant -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video9">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video9" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_pour_water.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Water plant</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 10: Take towel -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video10">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video10" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_take_towel.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Take towel</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 11: Stack cup -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video11">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video11" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pp_stack_cup.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Stack cup</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /video-carousel-track -->
+      <button class="carousel-btn right" onclick="nextSlide()">&#9654;</button>
+    </div>
+  </div>
+</section>
+<!-- ===================== /REAL-WORLD VIDEO CAROUSEL ===================== -->
+
+<!-- ===================== METHOD ===================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Proposed Framework</h2>
+      </div>
+    </div>
+
+    <!-- Core Novelties -->
+    <div class="columns is-centered" style="margin-top: 1.5rem;">
+      <div class="column is-four-fifths">
+        <h3 class="title is-4">Core Novelty</h3>
+        <div class="content has-text-justified">
+          <p>
+            We propose <b>Flow as Flow</b>, a framework that models physical robot velocity fields as
+            probability velocity fields, achieving efficient and high-quality generation of robot flows.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flow as Flow -->
+    <div class="columns is-centered" style="margin-top: 1.5rem;">
+      <div class="column is-four-fifths">
+        <h3 class="title is-4">Flow as Flow</h3>
+        <div class="content has-text-justified">
+          <p>
+            The core novelty of our framework is modeling physical robot velocity fields as probability velocity
+            fields in the generation space of flow matching. We initialize \(N\) (e.g., \(10\times 10\)) points
+            uniformly on the image and obtain their future positions by integrating the velocity fields predicted
+            by a flow generation model \(\boldsymbol{v}_\theta\).
+          </p>
+          <p>
+            We construct target velocity fields in a stabilizing feedback form:
+            \[
+              \boldsymbol{v}(\boldsymbol{\Xi}_h, \boldsymbol{X}, h)
+              = \dot{\boldsymbol{\Xi}}_h - k(\boldsymbol{X} - \boldsymbol{\Xi}_h),
+            \]
+            where \(\boldsymbol{X} \sim \mathcal{N}(\boldsymbol{\Xi}_h,\, \sigma_0^2 e^{-2kh}\boldsymbol{I})\).
+            The stabilization term enhances robustness to out-of-distribution samples.
+          </p>
+          <p>
+            We train \(\boldsymbol{v}_\theta\) with the conditional flow matching (CFM) loss:
+            \[
+              \mathcal{L}_{\text{CFM}} =
+              \mathbb{E}_{\boldsymbol{\Xi}_h, h, \boldsymbol{X}}
+              \left[\left\lVert \boldsymbol{v}_\theta\!\left(\boldsymbol{X}, h \mid \mathcal{I}, \mathcal{G}, \boldsymbol{\Xi}_{0:h-1}\right)
+              - \boldsymbol{v}\!\left(\boldsymbol{\Xi}_h, \boldsymbol{X}, h\right) \right\rVert^2\right].
+            \]
+            At inference, coordinates at step \(h\) are obtained by integrating \(\boldsymbol{v}_\theta\)
+            autoregressively, enabling fast generation with only a single ODE solve per step.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Model Architecture -->
+    <div class="columns is-centered" style="margin-top: 1.5rem;">
+      <div class="column is-four-fifths">
+        <h3 class="title is-4">Model Architecture</h3>
+        <figure class="image" style="margin-bottom: 1rem;">
+          <img src="./static/images/model.png" alt="Model architecture of Flow as Flow." />
+        </figure>
+        <p class="content has-text-justified" style="margin-bottom: 1.5rem;">
+          <b>Model architecture of Flow as Flow.</b> The framework consists of the Flow Generation Module
+          (using DiT conditioned on initial and goal images) and the Action Generation Module
+          (using DiT-based Diffusion Policy conditioned on generated robot flows).
+        </p>
+        <div class="content has-text-justified">
+          <p>Our framework consists of two main modules: the <b>Flow Generation Module</b> and the <b>Action Generation Module</b>.</p>
+          <h4 class="title is-5" style="margin-top: 1.2rem;">Flow Generation Module</h4>
+          <p>
+            Implements \(\boldsymbol{v}_\theta\) based on the Diffusion Transformer (DiT). Each DiT block
+            is modulated via adaLN-Zero using a shared conditioning vector constructed from \(\mathcal{I}\),
+            \(\mathcal{G}\), and sampling step \(h\). The initial and goal images are encoded via ResNet-18,
+            and the conditioning vector is obtained by summing embeddings.
+          </p>
+          <h4 class="title is-5" style="margin-top: 1.2rem;">Action Generation Module</h4>
+          <p>
+            Predicts end-effector poses conditioned on the generated robot flows. Implemented based on
+            Diffusion Policy with a DiT backbone, trained with a flow matching objective.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===================== /METHOD ===================== -->
+
+<!-- ===================== RESULTS ===================== -->
+
+<!-- Flow Generation Results (gray) -->
+<section class="section section-gray">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Results</h2>
+        <h3 class="title is-4" style="margin-top: 1.5rem;">Flow Generation</h3>
+
+        <!-- Quantitative -->
+        <h4 class="title is-5 has-text-left" style="margin-top: 1.5rem;">Quantitative Results</h4>
+        <p class="content has-text-justified">
+          We compared our method against baseline methods on the test sets of Fractal, Bridge V2, DROID-100,
+          and Fanuc Manipulation. In-domain settings corresponded to Fractal and Bridge V2; zero-shot settings
+          corresponded to DROID-100 and Fanuc Manipulation.
+        </p>
+        <div class="table-container">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th rowspan="3">Method</th>
+              <th rowspan="3">Flow as Flow</th>
+              <th colspan="3">In-domain</th>
+              <th colspan="3">&nbsp;</th>
+              <th colspan="3">Zero-shot</th>
+              <th colspan="3">&nbsp;</th>
+              <th rowspan="3">Inf. speed&nbsp;↓<br>[ms]</th>
+            </tr>
+            <tr>
+              <th colspan="3">Fractal</th>
+              <th colspan="3">Bridge V2</th>
+              <th colspan="3">DROID-100</th>
+              <th colspan="3">Fanuc Manip.</th>
+            </tr>
+            <tr>
+              <th>ADE&nbsp;↓</th><th>FDE&nbsp;↓</th><th>LTDR&nbsp;↑[%]</th>
+              <th>ADE&nbsp;↓</th><th>FDE&nbsp;↓</th><th>LTDR&nbsp;↑[%]</th>
+              <th>ADE&nbsp;↓</th><th>FDE&nbsp;↓</th><th>LTDR&nbsp;↑[%]</th>
+              <th>ADE&nbsp;↓</th><th>FDE&nbsp;↓</th><th>LTDR&nbsp;↑[%]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="section-row"><td colspan="15"><em>Language-conditioned</em></td></tr>
+            <tr>
+              <td>FLIP</td><td></td>
+              <td>66.17</td><td>87.52</td><td>35.69</td>
+              <td>50.73</td><td>68.43</td><td>47.72</td>
+              <td>43.10</td><td>49.10</td><td>54.87</td>
+              <td>28.31</td><td>50.83</td><td><u>72.17</u></td>
+              <td><u>35</u></td>
+            </tr>
+            <tr class="ours-light-row">
+              <td>FLIP <b>w/ Flow as Flow</b></td><td>✓</td>
+              <td>38.77</td><td>57.41</td><td>58.11</td>
+              <td>48.34</td><td>66.31</td><td>49.26</td>
+              <td><u>38.54</u></td><td><u>44.48</u></td><td><u>56.25</u></td>
+              <td>26.79</td><td>47.85</td><td>71.62</td>
+              <td><b>17</b></td>
+            </tr>
+            <tr>
+              <td>Im2Flow2Act</td><td></td>
+              <td>37.14</td><td>47.74</td><td>60.61</td>
+              <td>51.48</td><td>70.93</td><td>47.97</td>
+              <td>44.14</td><td>54.41</td><td>51.48</td>
+              <td>38.15</td><td>64.18</td><td>59.25</td>
+              <td>5,580</td>
+            </tr>
+            <tr class="ours-light-row">
+              <td>Im2Flow2Act <b>w/ Flow as Flow</b></td><td>✓</td>
+              <td><u>33.21</u></td><td><u>46.83</u></td><td><u>64.25</u></td>
+              <td><u>42.96</u></td><td><u>60.93</u></td><td><u>54.00</u></td>
+              <td>38.87</td><td>45.25</td><td>56.07</td>
+              <td><u>26.51</u></td><td>48.48</td><td>71.75</td>
+              <td>230</td>
+            </tr>
+            <tr>
+              <td>GigaWorld-0-Video</td><td>—</td>
+              <td>74.00</td><td>95.23</td><td>32.46</td>
+              <td>53.18</td><td>69.58</td><td>46.44</td>
+              <td>42.75</td><td>47.96</td><td>53.91</td>
+              <td>37.60</td><td>58.35</td><td>61.22</td>
+              <td>26,976</td>
+            </tr>
+            <tr class="section-row"><td colspan="15"><em>Goal-conditioned</em></td></tr>
+            <tr>
+              <td>Track2Act</td><td></td>
+              <td>64.32</td><td>86.62</td><td>42.00</td>
+              <td>47.29</td><td>64.13</td><td>51.61</td>
+              <td>40.73</td><td>47.43</td><td>54.29</td>
+              <td>27.37</td><td><u>47.17</u></td><td>70.99</td>
+              <td>1,430</td>
+            </tr>
+            <tr class="ours-row">
+              <td><b>Ours</b></td><td>✓</td>
+              <td><b>21.23</b></td><td><b>27.31</b></td><td><b>76.79</b></td>
+              <td><b>27.11</b></td><td><b>34.66</b></td><td><b>69.96</b></td>
+              <td><b>35.89</b></td><td><b>40.58</b></td><td><b>58.81</b></td>
+              <td><b>22.46</b></td><td><b>42.19</b></td><td><b>74.54</b></td>
+              <td>44</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="content has-text-justified" style="margin-top: 0.75em;">
+          <b>Quantitative comparison on robot flow generation benchmarks.</b>
+          <b>Bold</b> indicates the best result and <u>underline</u> indicates the second best.
+          Green rows indicate methods using Flow as Flow (ours = dark green, variants = light green).
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Flow Generation Qualitative (white) -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h4 class="title is-5 has-text-left">Qualitative Results</h4>
+        <p class="content has-text-justified">
+          Comparison of robot flow generation between our method and Track2Act on samples from
+          Fractal (i), Bridge V2 (ii), DROID-100 (iii), and Fanuc Manipulation (iv).
+          The left two columns show \(\mathcal{I}\) and \(\mathcal{G}\);
+          the remaining columns show the ground truth, Track2Act, and our method's flows overlaid on \(\mathcal{I}\).
+        </p>
+        <figure class="image">
+          <img src="./static/images/flow-qualitative.png" alt="Qualitative results of robot flow generation." />
+        </figure>
+        <p class="content has-text-justified" style="margin-top: 0.75rem;">
+          <b>Qualitative results of robot flow generation.</b>
+          Our method generated flows targeting the correct object with the appropriate motion direction,
+          both in in-domain and zero-shot settings.
+        </p>
+        <br>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Real-World Robot Results (gray) -->
+<section class="section section-gray">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h3 class="title is-4">Real-World Robot Experiments</h3>
+        <p class="content has-text-justified">
+          We validated our method in downstream mobile manipulation tasks using the Human Support Robot (HSR),
+          an 11-DoF mobile manipulator. We evaluated on 13 manipulation tasks, each with ~30 teleoperated demonstrations
+          for training and 20 trials for evaluation (260 trials per method).
+        </p>
+        <br>
+
+        <figure class="image">
+          <img src="./static/images/real-world-setup.png"
+               alt="Real-world experimental setup with the Human Support Robot." />
+        </figure>
+        <p class="content has-text-justified" style="margin-top: 0.75rem;">
+          <b>Representative examples of mobile manipulation tasks.</b>
+          13 diverse tasks: bin picking, bussing table, push bin into shelf, push chair,
+          open/close drawer, put fruit on plate, close box, water plant, take towel, close laptop,
+          stack block, and stack cup.
+        </p>
+        <br>
+
+        <h4 class="title is-5 has-text-left">Quantitative Results</h4>
+        <div class="table-container">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th style="text-align:left;">[%] Method</th>
+              <th>Flow-<br>based</th>
+              <th>Flow<br>as Flow</th>
+              <th>Push bin<br>into shelf</th>
+              <th>Push<br>chair</th>
+              <th>Close<br>drawer</th>
+              <th>Close<br>box</th>
+              <th>Take<br>towel</th>
+              <th>Bin<br>picking</th>
+              <th>Put fruit<br>on plate</th>
+              <th>Bussing<br>table</th>
+              <th>Close<br>laptop</th>
+              <th>Water<br>plant</th>
+              <th>Open<br>drawer</th>
+              <th>Stack<br>cup</th>
+              <th>Stack<br>block</th>
+              <th>Avg.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="section-row"><td colspan="17"><em>Language-conditioned</em></td></tr>
+            <tr>
+              <td style="text-align:left;">DP-Lang</td><td></td><td></td>
+              <td>75</td><td>75</td><td>65</td><td><u>65</u></td><td>35</td><td>35</td>
+              <td>35</td><td>35</td><td>35</td><td>5</td><td>20</td><td>5</td><td>10</td><td>38</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">FLIP</td><td>✓</td><td></td>
+              <td>45</td><td>55</td><td>50</td><td>60</td><td>50</td><td>25</td>
+              <td>15</td><td>15</td><td>25</td><td>5</td><td>10</td><td>10</td><td>5</td><td>28</td>
+            </tr>
+            <tr class="ours-light-row">
+              <td style="text-align:left;">FLIP <b>w/ Flow as Flow</b></td><td>✓</td><td>✓</td>
+              <td>55</td><td>55</td><td>70</td><td><u>65</u></td><td>55</td><td>45</td>
+              <td><u>60</u></td><td>45</td><td>40</td><td><u>25</u></td><td><u>25</u></td><td>10</td><td>10</td><td>43</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">Im2Flow2Act</td><td>✓</td><td></td>
+              <td>70</td><td>70</td><td>65</td><td><u>65</u></td><td>60</td><td>45</td>
+              <td>50</td><td>40</td><td>45</td><td>20</td><td>20</td><td><u>15</u></td><td><b>20</b></td><td>45</td>
+            </tr>
+            <tr class="ours-light-row">
+              <td style="text-align:left;">Im2Flow2Act <b>w/ Flow as Flow</b></td><td>✓</td><td>✓</td>
+              <td><u>85</u></td><td><u>80</u></td><td><b>85</b></td><td><b>75</b></td><td><u>70</u></td><td><u>60</u></td>
+              <td><u>60</u></td><td><u>55</u></td><td><b>55</b></td><td><u>25</u></td><td><u>25</u></td><td><b>20</b></td><td><u>15</u></td><td><u>55</u></td>
+            </tr>
+            <tr class="section-row"><td colspan="17"><em>Goal-conditioned</em></td></tr>
+            <tr>
+              <td style="text-align:left;">DP-Goal</td><td></td><td></td>
+              <td>40</td><td>30</td><td>45</td><td>50</td><td>25</td><td>30</td>
+              <td>5</td><td>15</td><td>30</td><td>5</td><td>5</td><td>0</td><td>5</td><td>22</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">Track2Act</td><td>✓</td><td></td>
+              <td><u>85</u></td><td><u>80</u></td><td>75</td><td>60</td><td>65</td><td>55</td>
+              <td>55</td><td><u>55</u></td><td>35</td><td>15</td><td>15</td><td><b>20</b></td><td>10</td><td>48</td>
+            </tr>
+            <tr class="ours-row">
+              <td style="text-align:left;"><b>Ours</b></td><td>✓</td><td>✓</td>
+              <td><b>90</b></td><td><b>90</b></td><td><u>80</u></td><td><b>75</b></td><td><b>75</b></td><td><b>70</b></td>
+              <td><b>65</b></td><td><b>65</b></td><td><u>50</u></td><td><b>30</b></td><td><b>30</b></td><td><b>20</b></td><td><u>15</u></td><td><b>58</b></td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">Oracle</td><td>✓</td><td>—</td>
+              <td>95</td><td>90</td><td>90</td><td>85</td><td>80</td><td>80</td>
+              <td>75</td><td>70</td><td>55</td><td>40</td><td>35</td><td>25</td><td>20</td><td>65</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="content has-text-justified" style="margin-top: 0.75em;">
+          <b>Quantitative results of real-world experiments</b> (260 trials per method, 20 per task).
+          <b>Bold</b> = best, <u>underline</u> = second best.
+          Our method achieved 58% average success rate, outperforming Track2Act (48%) by 10 points.
+        </p>
+        <br>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== /RESULTS ===================== -->
+
+
+<!-- ===================== BIBTEX ===================== -->
+<section class="section section-gray">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">BibTeX</h2>
+        <div class="content has-text-left">
+          <pre style="background:#f0f0f0; border-radius:8px; padding:1.2em; font-size:0.85rem; overflow-x:auto;"><code>To be announced.</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===================== /BIBTEX ===================== -->
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        This page was built using the
+        <a href="https://nerfies.github.io/" target="_blank">Nerfies</a> project page template.
+        The source code is licensed under
+        <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+<!-- ===================== /FOOTER ===================== -->
+
+</body>
+</html>
