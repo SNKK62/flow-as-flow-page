@@ -60,6 +60,7 @@
     .results-table thead tr:last-child th { border-bottom: 1px solid #999; }
     .results-table thead tr:nth-last-child(2) th { border-top: 1px solid #999; }
     .results-table .section-row td { background: #efefef; font-weight: bold; text-align: left; }
+    .results-table .section-row td { border-top: 1px solid #999; border-bottom: 1px solid #999; }
     .results-table .ours-row td { background: #BBDAC2; }
     .results-table .ours-light-row td { background: #E6EFE7; }
     .results-table th { background: #f8f8f8; }
@@ -90,9 +91,10 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">
-            Flow as Flow:<br>
-            Modeling Robot Velocity Fields as Probability Velocity Fields<br>
-            for Flow-Based Object Manipulation
+            <span style="color: #E05252;">Flow</span> as <span style="color: #4A90D9;">Flow</span>:<br>
+            Modeling <span style="color: #E05252;">Robot Velocity Fields</span><br>
+            as<br>
+            <span style="color: #4A90D9;">Probability Velocity Fields</span>
           </h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
@@ -242,7 +244,7 @@
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered" style="margin-bottom: 1rem;">Real-World Experiments</h2>
     <p class="has-text-centered" style="margin-bottom: 1.5rem; color: #666;">
-      Our method is evaluated on 13 mobile manipulation tasks using the Human Support Robot (HSR).
+      Our method is evaluated on <b style="color: #000;">13 mobile manipulation tasks</b> using the Human Support Robot (HSR).
       Click a video to enlarge.
     </p>
 
@@ -471,7 +473,10 @@
               - \boldsymbol{v}\!\left(\boldsymbol{\Xi}_h, \boldsymbol{X}, h\right) \right\rVert^2\right].
             \]
             At inference, coordinates at step \(h\) are obtained by integrating \(\boldsymbol{v}_\theta\)
-            autoregressively, enabling fast generation with only a single ODE solve per step.
+            autoregressively, enabling fast generation with only a single ODE solve per step:
+            \[
+              \boldsymbol{X}_h = \boldsymbol{X}_0 + \int_0^h \boldsymbol{v}_\theta\!\left(\boldsymbol{X}_\tau, \tau \mid \mathcal{I}, \mathcal{G}, \mathcal{X}_{<\tau}\right) d\tau.
+            \]
           </p>
         </div>
 
@@ -482,14 +487,9 @@
     <div class="columns is-centered" style="margin-top: 1.5rem;">
       <div class="column is-four-fifths">
         <h3 class="title is-4">Model Architecture</h3>
-        <figure class="image" style="margin-bottom: 1rem;">
+        <figure class="image" style="margin-bottom: 1.5rem;">
           <img src="./static/images/model.png" alt="Model architecture of Flow as Flow." />
         </figure>
-        <p class="content has-text-justified" style="margin-bottom: 1.5rem;">
-          <b>Model architecture of Flow as Flow.</b> The framework consists of the Flow Generation Module
-          (using DiT conditioned on initial and goal images) and the Action Generation Module
-          (using DiT-based Diffusion Policy conditioned on generated robot flows).
-        </p>
         <div class="content has-text-justified">
           <p>Our framework consists of two main modules: the <b>Flow Generation Module</b> and the <b>Action Generation Module</b>.</p>
           <h4 class="title is-5" style="margin-top: 1.2rem;">Flow Generation Module</h4>
