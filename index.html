@@ -530,7 +530,16 @@
         <div class="content has-text-justified">
           <p>
             The core novelty of our framework is modeling physical robot velocity fields as probability velocity
-            fields in the generation space of flow matching. We initialize \(N\) (e.g., \(10\times 10\)) points
+            fields in the generation space of flow matching.
+          </p>
+          <video autoplay muted loop playsinline
+            preload="auto"
+            style="width:100%; border-radius:10px; margin: 0.5rem 0;">
+            <source src="./static/videos/proposed.webm" type="video/webm">
+            <source src="./static/videos/proposed.mov" type="video/quicktime">
+          </video>
+          <p>
+            We initialize \(N\) (e.g., \(10\times 10\)) points
             uniformly on the image and obtain their future positions by integrating the velocity fields predicted
             by a flow generation model \(\boldsymbol{v}_\theta\).
           </p>
