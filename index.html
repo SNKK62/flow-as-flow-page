@@ -26,6 +26,25 @@
   <script src="./static/js/index.js"></script>
   <script src="./static/js/modal.js"></script>
   <script src="./static/js/carousel.js" defer></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Fade out the summary thumbnail overlay once the video is ready to play
+      const video = document.getElementById('summaryVideo');
+      const thumb = document.getElementById('summary-thumb');
+      if (video && thumb) {
+        const hide = () => {
+          thumb.style.opacity = '0';
+          setTimeout(() => { if (thumb.parentNode) thumb.remove(); }, 400);
+        };
+        if (video.readyState >= 3) {
+          hide();
+        } else {
+          video.addEventListener('canplay', hide, { once: true });
+          setTimeout(hide, 6000); // fallback after 6 s
+        }
+      }
+    });
+  </script>
 
   <!-- MathJax for equations -->
   <script type="text/javascript" id="MathJax-script" async
@@ -66,19 +85,67 @@
     .results-table th { background: #f8f8f8; }
     table.results-table thead th { border-bottom: none; }
     table.results-table thead tr:last-child th { border-bottom: 1px solid #999; }
-    .video-placeholder {
-      background: #e8e8e8;
-      border-radius: 12px;
+    .rw-table-wrapper {
+      overflow-x: auto;
+      position: relative;
+    }
+    .rw-table-wrapper table {
+      min-width: 900px;
+      border-collapse: separate !important;
+      border-spacing: 0;
+    }
+    .sticky-avg {
+      position: sticky;
+      right: 0;
+      z-index: 2;
+      border-left: 2px solid #999 !important;
+    }
+    /* summary video thumbnail overlay */
+    #summary-video-wrap {
+      position: relative;
+      width: 100%;
+    }
+    #summary-video-wrap video {
+      display: block;
+      width: 100%;
+      border-radius: 15px;
+    }
+    #summary-thumb {
+      position: absolute;
+      inset: 0;
+      border-radius: 15px;
+      background: url('./static/images/thumbs/summary.webp') center / cover no-repeat;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    /* scroll hint animation */
+    .scroll-hint {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 320px;
-      font-size: 1.1rem;
-      color: #888;
-      flex-direction: column;
       gap: 0.5rem;
+      color: #555;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.7rem;
+      background: #e8eef7;
+      border-radius: 20px;
+      padding: 0.35em 1.1em;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .video-placeholder .icon { font-size: 2.5rem; color: #bbb; }
+    .scroll-hint-arrow {
+      display: inline-block;
+      animation: nudge 1.4s ease-in-out infinite;
+      font-size: 1.1rem;
+    }
+    @keyframes nudge {
+      0%, 100% { transform: translateX(0); opacity: 1; }
+      40%       { transform: translateX(7px); opacity: 1; }
+      60%       { transform: translateX(-3px); opacity: 0.6; }
+    }
   </style>
 </head>
 
@@ -143,23 +210,20 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
 
-      <!-- Summary video (placeholder) -->
-      <div class="video-placeholder" style="border-radius: 15px;">
-        <span class="icon"><i class="fas fa-film"></i></span>
-        <span>Summary video (coming soon)</span>
-        <small style="color:#aaa;">Place <code>static/videos/summary.mp4</code> here</small>
+      <!-- Summary video wrapper: thumbnail overlay fades out on canplay -->
+      <div id="summary-video-wrap">
+        <video id="summaryVideo" controls muted loop playsinline
+          preload="auto">
+          <source src="./static/videos/summary_crf58.mp4" type="video/mp4">
+        </video>
+        <div id="summary-thumb"></div>
       </div>
-      <!-- When video is ready, replace the div above with:
-      <video id="summaryVideo" poster="" controls muted loop playsinline height="100%" style="border-radius: 15px;">
-        <source src="./static/videos/summary.mp4" type="video/mp4">
-      </video>
-      -->
 
       <br><br>
 
       <!-- Eye-catch figure -->
       <figure class="image">
-        <img src="./static/images/eyecatch.png" alt="Overview of Flow as Flow framework." />
+        <img src="./static/images/eyecatch.webp" alt="Overview of Flow as Flow framework." />
       </figure>
       <p class="content has-text-justified" style="margin-top: 1rem;">
         <b>Overview of Flow as Flow.</b> We leverage diverse cross-embodiment videos from multiple robot
@@ -244,7 +308,7 @@
     <h2 class="title is-3 has-text-centered" style="margin-bottom: 1rem;">Real-World Experiments</h2>
     <p class="has-text-centered" style="margin-bottom: 1.5rem; color: #666;">
       Our method is evaluated on <b style="color: #000;">13 mobile manipulation tasks</b> using the Human Support Robot (HSR).
-      Click a video to enlarge.
+      <br><span style="font-size:0.85rem;">🔍 Click a video to enlarge.</span>
     </p>
 
     <!-- Modal for enlarged video -->
@@ -260,68 +324,12 @@
       <button class="carousel-btn left" onclick="prevSlide()">&#9664;</button>
       <div class="video-carousel-track">
 
-        <!-- Task 1: Push bin into shelf -->
+        <!-- Task 1: Close box -->
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video1">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
               <video id="rw-video1" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_push_bin.mp4" type="video/mp4">
-              </video>
-            </div>
-            <div class="card-content" style="padding: 0.5rem 0.75rem;">
-              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Push bin into shelf</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Task 2: Push chair -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video2">
-          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
-            <div class="card-image is-relative">
-              <video id="rw-video2" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_push_chair.mp4" type="video/mp4">
-              </video>
-            </div>
-            <div class="card-content" style="padding: 0.5rem 0.75rem;">
-              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Push chair</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Task 3: Close drawer -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video3">
-          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
-            <div class="card-image is-relative">
-              <video id="rw-video3" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_close_drawer.mp4" type="video/mp4">
-              </video>
-            </div>
-            <div class="card-content" style="padding: 0.5rem 0.75rem;">
-              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Close drawer</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Task 4: Open drawer -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video4">
-          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
-            <div class="card-image is-relative">
-              <video id="rw-video4" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_open_drawer.mp4" type="video/mp4">
-              </video>
-            </div>
-            <div class="card-content" style="padding: 0.5rem 0.75rem;">
-              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Open drawer</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Task 5: Close box -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video5">
-          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
-            <div class="card-image is-relative">
-              <video id="rw-video5" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_close_box.mp4" type="video/mp4">
+                <source src="./static/videos/realworld/close_box.mp4" type="video/mp4">
               </video>
             </div>
             <div class="card-content" style="padding: 0.5rem 0.75rem;">
@@ -330,40 +338,40 @@
           </div>
         </div>
 
-        <!-- Task 6: Bussing table -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video6">
+        <!-- Task 2: Stack cup -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video2">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video6" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_bussing_table.mp4" type="video/mp4">
+              <video id="rw-video2" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/stack_cup.mp4" type="video/mp4">
               </video>
             </div>
             <div class="card-content" style="padding: 0.5rem 0.75rem;">
-              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Bussing table</p>
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Stack cup</p>
             </div>
           </div>
         </div>
 
-        <!-- Task 7: Close laptop -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video7">
+        <!-- Task 3: Push chair -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video3">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video7" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_close_laptop.mp4" type="video/mp4">
+              <video id="rw-video3" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/push_chair.mp4" type="video/mp4">
               </video>
             </div>
             <div class="card-content" style="padding: 0.5rem 0.75rem;">
-              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Close laptop</p>
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Push chair</p>
             </div>
           </div>
         </div>
 
-        <!-- Task 8: Bin picking -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video8">
+        <!-- Task 4: Bin picking -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video4">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video8" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_bin_picking.mp4" type="video/mp4">
+              <video id="rw-video4" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/bin_picking.mp4" type="video/mp4">
               </video>
             </div>
             <div class="card-content" style="padding: 0.5rem 0.75rem;">
@@ -372,26 +380,26 @@
           </div>
         </div>
 
-        <!-- Task 9: Water plant -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video9">
+        <!-- Task 5: Bussing table -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video5">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video9" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_pour_water.mp4" type="video/mp4">
+              <video id="rw-video5" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/bussing_table.mp4" type="video/mp4">
               </video>
             </div>
             <div class="card-content" style="padding: 0.5rem 0.75rem;">
-              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Water plant</p>
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Bussing table</p>
             </div>
           </div>
         </div>
 
-        <!-- Task 10: Take towel -->
-        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video10">
+        <!-- Task 6: Take towel -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video6">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video10" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_take_towel.mp4" type="video/mp4">
+              <video id="rw-video6" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/take_towel.mp4" type="video/mp4">
               </video>
             </div>
             <div class="card-content" style="padding: 0.5rem 0.75rem;">
@@ -400,16 +408,100 @@
           </div>
         </div>
 
-        <!-- Task 11: Stack cup -->
+        <!-- Task 7: Stack block -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video7">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video7" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/stack_block.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Stack block</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 8: Close laptop -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video8">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video8" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/close_laptop.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Close laptop</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 9: Close drawer -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video9">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video9" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/close_drawer.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Close drawer</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 10: Put fruit on plate -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video10">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video10" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/put_fruit.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Put fruit on plate</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 11: Open drawer -->
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video11">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
               <video id="rw-video11" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
-                <source src="./static/videos/realworld/pp_stack_cup.mp4" type="video/mp4">
+                <source src="./static/videos/realworld/open_drawer.mp4" type="video/mp4">
               </video>
             </div>
             <div class="card-content" style="padding: 0.5rem 0.75rem;">
-              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Stack cup</p>
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Open drawer</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 12: Water plant -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video12">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video12" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/pour_water.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Water plant</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 13: Push bin into shelf -->
+        <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video13">
+          <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="card-image is-relative">
+              <video id="rw-video13" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+                <source src="./static/videos/realworld/push_bin.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="card-content" style="padding: 0.5rem 0.75rem;">
+              <p style="text-align:center; font-size: 0.85rem; font-weight: bold;">Push bin into shelf</p>
             </div>
           </div>
         </div>
@@ -474,22 +566,10 @@
       <div class="column is-four-fifths">
         <h3 class="title is-4">Model Architecture</h3>
         <figure class="image" style="margin-bottom: 1.5rem;">
-          <img src="./static/images/model.png" alt="Model architecture of Flow as Flow." />
+          <img src="./static/images/model.webp" alt="Model architecture of Flow as Flow." />
         </figure>
         <div class="content has-text-justified">
           <p>Our framework consists of two main modules: the <b>Flow Generation Module</b> and the <b>Action Generation Module</b>.</p>
-          <h4 class="title is-5" style="margin-top: 1.2rem;">Flow Generation Module</h4>
-          <p>
-            Implements \(\boldsymbol{v}_\theta\) based on the Diffusion Transformer (DiT). Each DiT block
-            is modulated via adaLN-Zero using a shared conditioning vector constructed from \(\mathcal{I}\),
-            \(\mathcal{G}\), and sampling step \(h\). The initial and goal images are encoded via ResNet-18,
-            and the conditioning vector is obtained by summing embeddings.
-          </p>
-          <h4 class="title is-5" style="margin-top: 1.2rem;">Action Generation Module</h4>
-          <p>
-            Predicts end-effector poses conditioned on the generated robot flows. Implemented based on
-            Diffusion Policy with a DiT backbone, trained with a flow matching objective.
-          </p>
         </div>
       </div>
     </div>
@@ -509,11 +589,6 @@
 
         <!-- Quantitative -->
         <h4 class="title is-5 has-text-left" style="margin-top: 1.5rem;">Quantitative Results</h4>
-        <p class="content has-text-justified">
-          We compared our method against baseline methods on the test sets of Fractal, Bridge V2, DROID-100,
-          and Fanuc Manipulation. In-domain settings corresponded to Fractal and Bridge V2; zero-shot settings
-          corresponded to DROID-100 and Fanuc Manipulation.
-        </p>
         <div class="table-container">
         <table class="results-table">
           <thead>
@@ -618,14 +693,8 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h4 class="title is-5 has-text-left">Qualitative Results</h4>
-        <p class="content has-text-justified">
-          Comparison of robot flow generation between our method and Track2Act on samples from
-          Fractal (i), Bridge V2 (ii), DROID-100 (iii), and Fanuc Manipulation (iv).
-          The left two columns show \(\mathcal{I}\) and \(\mathcal{G}\);
-          the remaining columns show the ground truth, Track2Act, and our method's flows overlaid on \(\mathcal{I}\).
-        </p>
         <figure class="image">
-          <img src="./static/images/flow-qualitative.png" alt="Qualitative results of robot flow generation." />
+          <img src="./static/images/flow-qualitative.webp" alt="Qualitative results of robot flow generation." />
         </figure>
         <p class="content has-text-justified" style="margin-top: 0.75rem;">
           <b>Qualitative results of robot flow generation.</b>
@@ -645,15 +714,9 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h3 class="title is-4">Real-World Robot Experiments</h3>
-        <p class="content has-text-justified">
-          We validated our method in downstream mobile manipulation tasks using the Human Support Robot (HSR),
-          an 11-DoF mobile manipulator. We evaluated on 13 manipulation tasks, each with ~30 teleoperated demonstrations
-          for training and 20 trials for evaluation (260 trials per method).
-        </p>
-        <br>
 
         <figure class="image">
-          <img src="./static/images/real-world-setup.png"
+          <img src="./static/images/real-world-setup.webp"
                alt="Real-world experimental setup with the Human Support Robot." />
         </figure>
         <p class="content has-text-justified" style="margin-top: 0.75rem;">
@@ -665,7 +728,12 @@
         <br>
 
         <h4 class="title is-5 has-text-left">Quantitative Results</h4>
-        <div class="table-container">
+        <div class="scroll-hint">
+          <span class="scroll-hint-arrow">&#8594;</span>
+          <span>Scroll to see all tasks</span>
+          <span class="scroll-hint-arrow">&#8594;</span>
+        </div>
+        <div class="rw-table-wrapper">
         <table class="results-table">
           <thead>
             <tr>
@@ -685,7 +753,7 @@
               <th>Open<br>drawer</th>
               <th>Stack<br>cup</th>
               <th>Stack<br>block</th>
-              <th>Avg.</th>
+              <th class="sticky-avg" style="background:#f8f8f8;">Avg.</th>
             </tr>
           </thead>
           <tbody>
@@ -693,48 +761,57 @@
             <tr>
               <td style="text-align:left;">DP-Lang</td><td></td><td></td>
               <td>75</td><td>75</td><td>65</td><td><u>65</u></td><td>35</td><td>35</td>
-              <td>35</td><td>35</td><td>35</td><td>5</td><td>20</td><td>5</td><td>10</td><td>38</td>
+              <td>35</td><td>35</td><td>35</td><td>5</td><td>20</td><td>5</td><td>10</td>
+              <td class="sticky-avg" style="background:#fff;">38</td>
             </tr>
             <tr>
               <td style="text-align:left;">FLIP</td><td>✓</td><td></td>
               <td>45</td><td>55</td><td>50</td><td>60</td><td>50</td><td>25</td>
-              <td>15</td><td>15</td><td>25</td><td>5</td><td>10</td><td>10</td><td>5</td><td>28</td>
+              <td>15</td><td>15</td><td>25</td><td>5</td><td>10</td><td>10</td><td>5</td>
+              <td class="sticky-avg" style="background:#fff;">28</td>
             </tr>
             <tr class="ours-light-row">
               <td style="text-align:left;">FLIP</td><td>✓</td><td>✓</td>
               <td>55</td><td>55</td><td>70</td><td><u>65</u></td><td>55</td><td>45</td>
-              <td><u>60</u></td><td>45</td><td>40</td><td><u>25</u></td><td><u>25</u></td><td>10</td><td>10</td><td>43</td>
+              <td><u>60</u></td><td>45</td><td>40</td><td><u>25</u></td><td><u>25</u></td><td>10</td><td>10</td>
+              <td class="sticky-avg" style="background:#E6EFE7;">43</td>
             </tr>
             <tr>
               <td style="text-align:left;">Im2Flow2Act</td><td>✓</td><td></td>
               <td>70</td><td>70</td><td>65</td><td><u>65</u></td><td>60</td><td>45</td>
-              <td>50</td><td>40</td><td>45</td><td>20</td><td>20</td><td><u>15</u></td><td><b>20</b></td><td>45</td>
+              <td>50</td><td>40</td><td>45</td><td>20</td><td>20</td><td><u>15</u></td><td><b>20</b></td>
+              <td class="sticky-avg" style="background:#fff;">45</td>
             </tr>
             <tr class="ours-light-row">
               <td style="text-align:left;">Im2Flow2Act</td><td>✓</td><td>✓</td>
               <td><u>85</u></td><td><u>80</u></td><td><b>85</b></td><td><b>75</b></td><td><u>70</u></td><td><u>60</u></td>
-              <td><u>60</u></td><td><u>55</u></td><td><b>55</b></td><td><u>25</u></td><td><u>25</u></td><td><b>20</b></td><td><u>15</u></td><td><u>55</u></td>
+              <td><u>60</u></td><td><u>55</u></td><td><b>55</b></td><td><u>25</u></td><td><u>25</u></td><td><b>20</b></td><td><u>15</u></td>
+              <td class="sticky-avg" style="background:#E6EFE7;"><u>55</u></td>
             </tr>
             <tr class="section-row"><td colspan="17"><em>Goal-conditioned</em></td></tr>
             <tr>
               <td style="text-align:left;">DP-Goal</td><td></td><td></td>
               <td>40</td><td>30</td><td>45</td><td>50</td><td>25</td><td>30</td>
-              <td>5</td><td>15</td><td>30</td><td>5</td><td>5</td><td>0</td><td>5</td><td>22</td>
+              <td>5</td><td>15</td><td>30</td><td>5</td><td>5</td><td>0</td><td>5</td>
+              <td class="sticky-avg" style="background:#fff;">22</td>
             </tr>
             <tr>
               <td style="text-align:left;">Track2Act</td><td>✓</td><td></td>
               <td><u>85</u></td><td><u>80</u></td><td>75</td><td>60</td><td>65</td><td>55</td>
-              <td>55</td><td><u>55</u></td><td>35</td><td>15</td><td>15</td><td><b>20</b></td><td>10</td><td>48</td>
+              <td>55</td><td><u>55</u></td><td>35</td><td>15</td><td>15</td><td><b>20</b></td><td>10</td>
+              <td class="sticky-avg" style="background:#fff;">48</td>
             </tr>
             <tr class="ours-row">
               <td style="text-align:left;"><b>Ours</b></td><td>✓</td><td>✓</td>
               <td><b>90</b></td><td><b>90</b></td><td><u>80</u></td><td><b>75</b></td><td><b>75</b></td><td><b>70</b></td>
-              <td><b>65</b></td><td><b>65</b></td><td><u>50</u></td><td><b>30</b></td><td><b>30</b></td><td><b>20</b></td><td><u>15</u></td><td><b>58</b></td>
+              <td><b>65</b></td><td><b>65</b></td><td><u>50</u></td><td><b>30</b></td><td><b>30</b></td><td><b>20</b></td><td><u>15</u></td>
+              <td class="sticky-avg" style="background:#BBDAC2;"><b>58</b></td>
             </tr>
             <tr>
               <td style="text-align:left;">Oracle</td><td>✓</td><td>—</td>
               <td>95</td><td>90</td><td>90</td><td>85</td><td>80</td><td>80</td>
-              <td>75</td><td>70</td><td>55</td><td>40</td><td>35</td><td>25</td><td>20</td><td>65</td>
+              <td>75</td><td>70</td><td>55</td><td>40</td><td>35</td><td>25</td><td>20</td>
+              <td class="sticky-avg" style="background:#fff;">65</td>
             </tr>
           </tbody>
         </table>
@@ -743,6 +820,17 @@
           <b>Quantitative results of real-world experiments</b> (260 trials per method, 20 per task).
           <b>Bold</b> = best, <u>underline</u> = second best.
           Our method achieved 58% average success rate, outperforming Track2Act (48%) by 10 points.
+        </p>
+        <br>
+
+        <h4 class="title is-5 has-text-left">Qualitative Results</h4>
+        <figure class="image">
+          <img src="./static/images/real-world-qualitative-main.webp"
+               alt="Qualitative results of real-world experiments." />
+        </figure>
+        <p class="content has-text-justified" style="margin-top: 0.75rem;">
+          <b>Qualitative results of our method in real-world experiments</b>, showing three successful rollouts:
+          (a) <b>bussing table</b>, (b) <b>close laptop</b>, and (c) <b>push chair</b>.
         </p>
         <br>
 
