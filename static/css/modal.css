@@ -1,32 +1,39 @@
 .modal-content-flex-width {
-  width: 60%;
-  @media (max-width: 768px) {
-    width: 100%;
+  width: 88%;
+  max-width: 960px;
+}
+@media (max-width: 768px) {
+  .modal-content-flex-width {
+    width: 96%;
   }
+}
+
+/* Video container: centered, natural aspect ratio, cursor hints click-to-close */
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.modal-container video {
+  cursor: default; /* restore default cursor on the video itself */
 }
 
 .modal-container.is-active {
   opacity: 0;
-  transform: scale(0.8);
-  animation: 
+  transform: scale(0.85);
+  animation:
     fadeInOpacity 0.2s ease-out forwards,
-    fadeInTransform 0.5s ease-out forwards;
+    fadeInTransform 0.4s ease-out forwards;
 }
 
 @keyframes fadeInOpacity {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes fadeInTransform {
-  from {
-    transform: scale(0.8);
-  }
-  to {
-    transform: scale(1);
-  }
+  from { transform: scale(0.85); }
+  to   { transform: scale(1); }
 }

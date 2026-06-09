@@ -213,7 +213,8 @@
       <!-- Summary video wrapper: thumbnail overlay fades out on canplay -->
       <div id="summary-video-wrap">
         <video id="summaryVideo" controls muted loop playsinline
-          preload="auto">
+          preload="auto"
+          poster="./static/images/thumbs/summary.webp">
           <source src="./static/videos/summary_crf58.mp4" type="video/mp4">
         </video>
         <div id="summary-thumb"></div>
@@ -315,7 +316,7 @@
     <div class="modal" id="modal-video-carousel">
       <div class="modal-background"></div>
       <div class="modal-content modal-content-flex-width">
-        <p class="image is-16by9 modal-container"></p>
+        <div class="modal-container"></div>
       </div>
     </div>
 
@@ -328,7 +329,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video1">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video1" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video1" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/close_box.mp4" type="video/mp4">
               </video>
             </div>
@@ -342,7 +343,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video2">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video2" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video2" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/stack_cup.mp4" type="video/mp4">
               </video>
             </div>
@@ -356,7 +357,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video3">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video3" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video3" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/push_chair.mp4" type="video/mp4">
               </video>
             </div>
@@ -370,7 +371,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video4">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video4" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video4" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/bin_picking.mp4" type="video/mp4">
               </video>
             </div>
@@ -384,7 +385,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video5">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video5" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video5" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/bussing_table.mp4" type="video/mp4">
               </video>
             </div>
@@ -398,7 +399,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video6">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video6" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video6" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/take_towel.mp4" type="video/mp4">
               </video>
             </div>
@@ -412,7 +413,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video7">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video7" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video7" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/stack_block.mp4" type="video/mp4">
               </video>
             </div>
@@ -426,7 +427,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video8">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video8" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video8" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/close_laptop.mp4" type="video/mp4">
               </video>
             </div>
@@ -440,7 +441,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video9">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video9" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video9" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/close_drawer.mp4" type="video/mp4">
               </video>
             </div>
@@ -454,7 +455,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video10">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video10" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video10" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/put_fruit.mp4" type="video/mp4">
               </video>
             </div>
@@ -468,7 +469,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video11">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video11" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video11" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/open_drawer.mp4" type="video/mp4">
               </video>
             </div>
@@ -482,7 +483,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video12">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video12" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video12" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/pour_water.mp4" type="video/mp4">
               </video>
             </div>
@@ -496,7 +497,7 @@
         <div class="video-slide modal-trigger popup" data-target="modal-video-carousel" data-source="rw-video13">
           <div class="card video-card" style="display: flex; flex-direction: column; align-items: center;">
             <div class="card-image is-relative">
-              <video id="rw-video13" autoplay muted loop playsinline style="max-width: 100%; height: auto; border-radius: 10px;">
+              <video id="rw-video13" autoplay muted loop playsinline preload="none" style="max-width: 100%; height: auto; border-radius: 10px;">
                 <source src="./static/videos/realworld/push_bin.mp4" type="video/mp4">
               </video>
             </div>
