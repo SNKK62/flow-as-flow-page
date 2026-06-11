@@ -3,6 +3,14 @@
 
 <head>
   <meta charset="utf-8">
+  <!-- Apply theme before CSS renders to prevent flash -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
   <meta name="description"
     content="Flow as Flow: Modeling Robot Velocity Fields as Probability Velocity Fields for Flow-Based Object Manipulation">
   <meta name="keywords"
@@ -150,6 +158,16 @@
 </head>
 
 <body>
+
+<!-- Theme toggle switch (fixed top-right) -->
+<div id="theme-switch-wrap" title="Toggle dark/light mode" aria-label="Toggle dark/light mode">
+  <i class="fas fa-sun  theme-sw-icon"></i>
+  <label class="theme-sw-label" for="theme-checkbox">
+    <input type="checkbox" id="theme-checkbox">
+    <span class="theme-sw-track"><span class="theme-sw-thumb"></span></span>
+  </label>
+  <i class="fas fa-moon theme-sw-icon"></i>
+</div>
 
 <!-- ===================== HERO ===================== -->
 <section class="hero">
@@ -307,8 +325,8 @@
 <section class="section section-gray">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered" style="margin-bottom: 1rem;">Real-World Experiments</h2>
-    <p class="has-text-centered" style="margin-bottom: 1.5rem; color: #666;">
-      Our method is evaluated on <b style="color: #000;">13 mobile manipulation tasks</b> using the Human Support Robot (HSR).
+    <p class="has-text-centered carousel-caption" style="margin-bottom: 1.5rem;">
+      Our method is evaluated on <b>13 mobile manipulation tasks</b> using the Human Support Robot (HSR).
       <br><span style="font-size:0.85rem;">🔍 Click a video to enlarge.</span>
     </p>
 
@@ -532,12 +550,9 @@
             The core novelty of our framework is modeling physical robot velocity fields as probability velocity
             fields in the generation space of flow matching.
           </p>
-          <video autoplay muted loop playsinline
-            preload="auto"
+          <img src="./static/videos/proposed.gif"
+            alt="Proposed method visualization"
             style="width:100%; border-radius:10px; margin: 0.5rem 0;">
-            <source src="./static/videos/proposed.webm" type="video/webm">
-            <source src="./static/videos/proposed.mov" type="video/quicktime">
-          </video>
           <p>
             We initialize \(N\) (e.g., \(10\times 10\)) points
             uniformly on the image and obtain their future positions by integrating the velocity fields predicted
@@ -859,7 +874,7 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">BibTeX</h2>
         <div class="content has-text-left">
-          <pre style="background:#f0f0f0; border-radius:8px; padding:1.2em; font-size:0.85rem; overflow-x:auto;"><code>To be announced.</code></pre>
+          <pre class="bibtex-block"><code>To be announced.</code></pre>
         </div>
       </div>
     </div>

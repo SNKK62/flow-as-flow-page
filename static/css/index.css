@@ -187,7 +187,246 @@ img {
   cursor: pointer;
   transition: transform 0.2s;
 }
+
+.carousel-caption {
+  color: #666;
+}
+[data-theme="dark"] .carousel-caption {
+  color: #a1a1aa;
+}
+[data-theme="dark"] .carousel-caption b {
+  color: #f4f4f5;
+}
+
+.bibtex-block {
+  background: #f0f0f0;
+  border-radius: 8px;
+  padding: 1.2em;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  color: #1a1a1a;
+}
+[data-theme="dark"] .bibtex-block {
+  background: #18181b;
+  border: 1px solid #52525b;
+  color: #e4e4e7;
+}
 .popup:hover {
   overflow: visible;
   transform: scale(1.04);
+}
+
+/* ============================================================
+   THEME TOGGLE SWITCH
+   ============================================================ */
+#theme-switch-wrap {
+  position: fixed;
+  top: 1rem;
+  right: 2.2rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255,255,255,0.82);
+  border: 1px solid #d4d4d8;
+  border-radius: 999px;
+  padding: 0.3rem 0.55rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.2s, border-color 0.2s;
+}
+.theme-sw-icon {
+  font-size: 0.78rem;
+  color: #71717a;
+  pointer-events: none;
+  line-height: 1;
+}
+.theme-sw-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+}
+.theme-sw-label input { display: none; }
+.theme-sw-track {
+  position: relative;
+  display: inline-block;
+  width: 2.4rem;
+  height: 1.25rem;
+  background: #d1d5db;
+  border-radius: 999px;
+  transition: background 0.25s;
+}
+.theme-sw-thumb {
+  position: absolute;
+  top: 0.175rem;
+  left: 0.175rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  transition: transform 0.25s;
+}
+/* checked = dark mode: thumb slides to right */
+.theme-sw-label input:checked + .theme-sw-track { background: #52525b; }
+.theme-sw-label input:checked + .theme-sw-track .theme-sw-thumb {
+  transform: translateX(1.15rem);
+}
+
+/* ============================================================
+   DARK MODE — CSS VARIABLES
+   ============================================================ */
+:root {
+  --dm-bg:           #18181b;
+  --dm-bg-alt:       #27272a;
+  --dm-bg-elevated:  #3f3f46;
+  --dm-text:         #f4f4f5;
+  --dm-text-muted:   #a1a1aa;
+  --dm-border:       #52525b;
+  --dm-link:         hsl(204, 70%, 68%);
+}
+
+/* ============================================================
+   DARK MODE — OVERRIDES
+   ============================================================ */
+
+/* --- Base --- */
+[data-theme="dark"] body {
+  background-color: var(--dm-bg);
+  color: var(--dm-text);
+}
+
+/* --- Bulma text --- */
+[data-theme="dark"] .title,
+[data-theme="dark"] .subtitle {
+  color: var(--dm-text) !important;
+}
+[data-theme="dark"] .content,
+[data-theme="dark"] .content p,
+[data-theme="dark"] .content li,
+[data-theme="dark"] p,
+[data-theme="dark"] strong,
+[data-theme="dark"] b {
+  color: var(--dm-text);
+}
+[data-theme="dark"] .has-text-centered { color: var(--dm-text); }
+
+/* --- Bulma hero / section (inherit from body) --- */
+[data-theme="dark"] .hero,
+[data-theme="dark"] .section,
+[data-theme="dark"] .footer {
+  background-color: var(--dm-bg);
+  color: var(--dm-text);
+}
+
+/* --- Gray sections --- */
+[data-theme="dark"] .section-gray {
+  background-color: var(--dm-bg-alt);
+}
+
+/* --- Findings box --- */
+[data-theme="dark"] .findings-box {
+  background-color: #172038;
+  border-color: #2a3f5f;
+}
+
+/* --- Scroll hint --- */
+[data-theme="dark"] .scroll-hint {
+  background: #1a2744;
+  color: #93b4d8;
+}
+
+/* --- Links --- */
+[data-theme="dark"] .publication-authors a {
+  color: var(--dm-link) !important;
+}
+[data-theme="dark"] a { color: var(--dm-link); }
+[data-theme="dark"] .footer a { color: var(--dm-link); }
+
+/* --- Buttons (publication links) --- */
+[data-theme="dark"] .button.is-light {
+  background-color: var(--dm-bg-alt);
+  color: var(--dm-text);
+  border-color: var(--dm-border);
+}
+
+/* --- Results table --- */
+[data-theme="dark"] .results-table {
+  border-top-color: #a1a1aa;
+  border-bottom-color: #a1a1aa;
+  color: var(--dm-text);
+}
+[data-theme="dark"] .results-table th {
+  background: #27272a !important;
+  color: var(--dm-text);
+}
+[data-theme="dark"] .results-table td {
+  color: var(--dm-text);
+}
+[data-theme="dark"] .results-table thead tr:last-child th {
+  border-bottom-color: #71717a;
+}
+[data-theme="dark"] .results-table thead tr:nth-last-child(2) th {
+  border-top-color: #71717a;
+}
+[data-theme="dark"] .results-table .section-row td {
+  background: #232329 !important;
+  border-top-color: #71717a !important;
+  border-bottom-color: #71717a !important;
+}
+[data-theme="dark"] .results-table .ours-row td {
+  background: #14532d !important;
+}
+[data-theme="dark"] .results-table .ours-light-row td {
+  background: #1a3a24 !important;
+}
+
+/* --- Sticky Avg column (overrides inline style="background:#fff") --- */
+[data-theme="dark"] .sticky-avg {
+  background-color: var(--dm-bg) !important;
+  border-left-color: #71717a !important;
+}
+[data-theme="dark"] thead .sticky-avg,
+[data-theme="dark"] .results-table thead th.sticky-avg {
+  background-color: #27272a !important;
+}
+[data-theme="dark"] .ours-row .sticky-avg {
+  background-color: #14532d !important;
+}
+[data-theme="dark"] .ours-light-row .sticky-avg {
+  background-color: #1a3a24 !important;
+}
+
+/* --- Publication venue/awards --- */
+[data-theme="dark"] .publication-venue { color: var(--dm-text-muted); }
+
+/* --- Carousel --- */
+[data-theme="dark"] .carousel-btn {
+  background: #3f3f46;
+  color: #e4e4e7;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+[data-theme="dark"] .carousel-dots .dot { background-color: #52525b; }
+[data-theme="dark"] .carousel-dots .dot.active { background-color: #d4d4d8; }
+[data-theme="dark"] .video-slide .card {
+  background-color: var(--dm-bg-alt);
+  border-color: var(--dm-border);
+}
+[data-theme="dark"] .video-slide .card-content p { color: var(--dm-text); }
+
+/* --- Modal --- */
+[data-theme="dark"] .modal-content { background-color: var(--dm-bg-alt); }
+[data-theme="dark"] .modal-background { background-color: rgba(0,0,0,0.88); }
+
+/* --- Footer icon --- */
+[data-theme="dark"] .footer .icon-link { color: var(--dm-text); }
+
+/* --- Theme toggle button in dark mode --- */
+[data-theme="dark"] #theme-toggle {
+  background: var(--dm-bg-alt);
+  border-color: var(--dm-border);
+  color: var(--dm-text);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
