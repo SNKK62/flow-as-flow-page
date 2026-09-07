@@ -351,6 +351,22 @@ img {
   color: var(--dm-text);
   border-color: var(--dm-border);
 }
+/* arXiv button: dark-on-dark by default in Bulma, so lift it instead */
+[data-theme="dark"] .button.is-dark {
+  background-color: var(--dm-bg-elevated);
+  color: var(--dm-text) !important;
+  border: 1px solid var(--dm-border);
+}
+[data-theme="dark"] .button.is-dark .icon,
+[data-theme="dark"] .button.is-dark span {
+  color: var(--dm-text) !important;
+}
+[data-theme="dark"] .button.is-dark:hover,
+[data-theme="dark"] .button.is-dark:focus {
+  background-color: #57575f;
+  border-color: #8a8a94;
+  color: #fff !important;
+}
 
 /* --- Results table --- */
 [data-theme="dark"] .results-table {
@@ -429,4 +445,13 @@ img {
   border-color: var(--dm-border);
   color: var(--dm-text);
   box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* --- Author block / venue badge (dark) --- */
+[data-theme="dark"] .author-affil { color: var(--dm-text-muted); }
+[data-theme="dark"] .venue-name {
+  background: linear-gradient(100deg, #F07A7A 0%, #74B0E8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

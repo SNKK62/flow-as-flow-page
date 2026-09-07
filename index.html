@@ -127,6 +127,38 @@
       transition: opacity 0.4s ease;
     }
 
+    /* author block */
+    .author-names {
+      margin-top: 1.1rem;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+    .author-names .author-block { margin: 0 0.15em; }
+    .author-affil {
+      margin-top: 0.35rem;
+      font-size: 1.02rem;
+      color: #6b7280;
+      letter-spacing: 0.02em;
+    }
+
+    /* venue */
+    .venue-wrap {
+      margin: 1.4rem 0 0.6rem;
+    }
+    .venue-name {
+      font-family: 'Google Sans', 'Noto Sans', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      background: linear-gradient(100deg, #E05252 0%, #4A90D9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    @media screen and (max-width: 768px) {
+      .venue-name { font-size: 1.3rem; }
+    }
+
     /* scroll hint animation */
     .scroll-hint {
       display: flex;
@@ -181,30 +213,29 @@
             <span style="background: linear-gradient(to bottom, #E05252, #4A90D9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">as</span><br>
             <span style="color: #4A90D9;">Probability Velocity Fields</span>
           </h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <p><b>Anonymous Author(s)</b></p>
-            </span>
+          <div class="is-size-5 publication-authors author-names">
+            <span class="author-block">Koki Seno,</span>
+            <span class="author-block">Daichi Yashima,</span>
+            <span class="author-block">Yusuke Takagi,</span>
+            <span class="author-block">Kento Tokura,</span>
+            <span class="author-block">Komei Sugiura</span>
           </div>
-          <p><br><b>Under Review</b><br></p>
+          <div class="publication-authors author-affil">
+            <span class="author-block">Keio University</span>
+          </div>
+
+          <div class="venue-wrap">
+            <span class="venue-name">CoRL 2026</span>
+          </div>
 
           <div class="column has-text-centered">
             <div class="publication-links">
-              <!-- Paper -->
-              <span class="link-block">
-                <span class="button is-normal is-rounded is-light"
-                  style="pointer-events: none; opacity: 0.5; cursor: default;">
-                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                  <span>Paper (coming soon)</span>
-                </span>
-              </span>
               <!-- arXiv -->
               <span class="link-block">
-                <span class="button is-normal is-rounded is-light"
-                  style="pointer-events: none; opacity: 0.5; cursor: default;">
+                <a href="https://arxiv.org/abs/2606.23090" class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="ai ai-arxiv"></i></span>
-                  <span>arXiv (coming soon)</span>
-                </span>
+                  <span>arXiv</span>
+                </a>
               </span>
               <!-- Code -->
               <span class="link-block">
